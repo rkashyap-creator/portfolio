@@ -7,6 +7,47 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
+    /* CSS Variables for Dark/Light Mode */
+    :root {
+      /* Dark Mode Defaults */
+      --color-background-main: #0B0E14;
+      --color-background-alt: #020617;
+      --color-text-main: #F3F4F6;
+      --color-text-header: #FFFFFF;
+      --color-text-muted: #9CA3AF;
+      --color-accent-blue: #38BDF8;
+      --color-accent-purple: #A855F7;
+      --color-header-bg-start: rgba(10, 16, 30, 0.96);
+      --color-header-bg-end: rgba(18, 29, 52, 0.94);
+      --color-section-bg-start: rgba(17, 24, 39, 0.95);
+      --color-section-bg-end: rgba(24, 35, 55, 0.90);
+      --color-nav-bg: rgba(15, 23, 42, 0.98);
+      --color-nav-border: rgba(56, 189, 248, 0.2);
+      --color-job-border: rgba(168, 85, 247, 0.25);
+      --color-project-card-bg: rgba(15, 23, 42, 0.9);
+      --color-project-border: rgba(56, 189, 248, 0.25);
+    }
+
+    /* Light Mode Overrides */
+    .light-mode {
+      --color-background-main: #F8FAFC;
+      --color-background-alt: #FFFFFF;
+      --color-text-main: #1F2937;
+      --color-text-header: #000000;
+      --color-text-muted: #4B5563;
+      --color-accent-blue: #0EA5E9;
+      --color-accent-purple: #9333EA;
+      --color-header-bg-start: rgba(255, 255, 255, 0.96);
+      --color-header-bg-end: rgba(243, 244, 246, 0.94);
+      --color-section-bg-start: rgba(255, 255, 255, 0.95);
+      --color-section-bg-end: rgba(249, 250, 251, 0.90);
+      --color-nav-bg: rgba(255, 255, 255, 0.98);
+      --color-nav-border: rgba(0, 0, 0, 0.1);
+      --color-job-border: rgba(147, 51, 234, 0.15);
+      --color-project-card-bg: rgba(255, 255, 255, 0.9);
+      --color-project-border: rgba(147, 51, 234, 0.2);
+    }
+
     * {
       margin: 0;
       padding: 0;
@@ -15,12 +56,13 @@
 
     body {
       font-family: 'Poppins', sans-serif;
-      background-color: #0B0E14; /* Slightly lighter black for depth */
-      color: #F3F4F6;
+      background-color: var(--color-background-main);
+      color: var(--color-text-main);
       line-height: 1.6;
       overflow-x: hidden;
       position: relative;
       padding-bottom: 80px; /* Space for mobile nav */
+      transition: background-color 0.3s ease, color 0.3s ease;
     }
 
     /* Animated Background Canvas */
@@ -40,12 +82,18 @@
       max-width: 1200px;
       margin: 0 auto;
       padding: 40px 20px;
+      opacity: 0; /* Hidden by default, shown after splash screen */
+      transition: opacity 0.5s ease;
     }
-
+    
+    .content-visible {
+      opacity: 1;
+    }
+    
     /* Header Section */
     header {
-      background: linear-gradient(135deg, rgba(10, 16, 30, 0.96) 0%, rgba(18, 29, 52, 0.94) 100%);
-      border-bottom: 3px solid #38BDF8;
+      background: linear-gradient(135deg, var(--color-header-bg-start) 0%, var(--color-header-bg-end) 100%);
+      border-bottom: 3px solid var(--color-accent-blue);
       padding: 60px 40px 40px;
       border-radius: 20px;
       margin-bottom: 30px;
@@ -53,21 +101,31 @@
       backdrop-filter: blur(12px);
     }
 
+    .light-mode header {
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(0, 0, 0, 0.04);
+    }
+
     header h1 {
       font-size: 3.5rem;
-      color: #FFFFFF;
+      color: var(--color-text-header);
       margin-bottom: 10px;
       text-shadow: 0 0 20px rgba(248, 250, 252, 0.6);
       font-weight: 800;
       letter-spacing: -1px;
     }
+    .light-mode header h1 {
+      text-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+    }
 
     header .tagline {
       font-size: 1.3rem;
-      color: #E5E7EB;
+      color: var(--color-text-main);
       font-weight: 500;
       margin-bottom: 20px;
       text-shadow: 0 0 10px rgba(148, 163, 184, 0.6);
+    }
+    .light-mode header .tagline {
+      text-shadow: none;
     }
 
     .contact-info {
@@ -81,25 +139,28 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      color: #E5E7EB;
+      color: var(--color-text-main);
       font-size: 1rem;
     }
 
     .contact-item a {
-      color: #38BDF8;
+      color: var(--color-accent-blue);
       text-decoration: none;
       transition: all 0.3s ease;
     }
 
     .contact-item a:hover {
-      color: #A855F7;
+      color: var(--color-accent-purple);
       text-shadow: 0 0 10px rgba(168, 85, 247, 0.6);
     }
+    .light-mode .contact-item a:hover {
+        text-shadow: none;
+    }
 
-    /* Top Navigation (Desktop) - Static as requested */
+    /* Top Navigation (Desktop) - Sticky */
     .top-nav {
-      background: rgba(15, 23, 42, 0.98);
-      border-bottom: 1px solid rgba(56, 189, 248, 0.2);
+      background: var(--color-nav-bg);
+      border-bottom: 1px solid var(--color-nav-border);
       padding: 15px 0;
       position: sticky;
       top: 0;
@@ -110,6 +171,9 @@
       gap: 20px;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
     }
+    .light-mode .top-nav {
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
 
     .nav-btn {
       display: flex;
@@ -118,7 +182,7 @@
       gap: 4px;
       background: transparent;
       border: none;
-      color: #94A3B8;
+      color: var(--color-text-muted);
       cursor: pointer;
       font-size: 0.9rem;
       font-weight: 600;
@@ -129,18 +193,24 @@
 
     .nav-btn .icon {
       font-size: 1.4rem;
-      color: #38BDF8;
+      color: var(--color-accent-blue);
       transition: transform 0.2s ease;
     }
 
     .nav-btn:hover {
-      color: #F8FAFC;
+      color: var(--color-text-header);
       background: rgba(56, 189, 248, 0.1);
+    }
+    .light-mode .nav-btn:hover {
+        background: rgba(0, 0, 0, 0.05);
     }
 
     .nav-btn:hover .icon {
       transform: translateY(-2px);
       text-shadow: 0 0 10px rgba(56, 189, 248, 0.6);
+    }
+    .light-mode .nav-btn:hover .icon {
+        text-shadow: none;
     }
 
     /* Bottom Navigation (Mobile) - Fixed at bottom */
@@ -161,6 +231,16 @@
       align-items: center;
       z-index: 100;
       box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    }
+    .light-mode .bottom-nav {
+        background: rgba(255, 255, 255, 0.95);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    }
+    
+    .mode-toggle-btn {
+      padding: 8px; /* Added padding to make it easier to tap */
+      margin-left: 10px; /* Add some space */
     }
 
     /* Media Queries for Navigation */
@@ -188,6 +268,13 @@
       .nav-btn span:not(.icon) {
         font-size: 0.75rem;
       }
+      /* Adjust spacing for mobile nav */
+      .bottom-nav {
+        padding: 12px 10px;
+      }
+      .bottom-nav .nav-btn {
+        padding: 6px 8px;
+      }
     }
 
     @media (min-width: 769px) {
@@ -201,8 +288,8 @@
 
     /* Section Styling */
     .section {
-      background: linear-gradient(135deg, rgba(17, 24, 39, 0.95) 0%, rgba(24, 35, 55, 0.90) 100%);
-      border: 1px solid rgba(56, 189, 248, 0.2);
+      background: linear-gradient(135deg, var(--color-section-bg-start) 0%, var(--color-section-bg-end) 100%);
+      border: 1px solid var(--color-nav-border);
       border-radius: 15px;
       padding: 40px;
       margin-bottom: 30px;
@@ -211,30 +298,45 @@
       transition: all 0.3s ease;
     }
 
+    .light-mode .section {
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(0, 0, 0, 0.04);
+    }
+
     .section:hover {
       border-color: rgba(56, 189, 248, 0.45);
       box-shadow: 0 15px 50px rgba(56, 189, 248, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.08);
     }
+    .light-mode .section:hover {
+        border-color: rgba(0, 0, 0, 0.2);
+        box-shadow: 0 15px 50px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(0, 0, 0, 0.08);
+    }
 
     .section h2 {
       font-size: 2rem;
-      color: #FFFFFF;
+      color: var(--color-text-header);
       margin-bottom: 25px;
       padding-bottom: 15px;
-      border-bottom: 2px solid #A855F7;
+      border-bottom: 2px solid var(--color-accent-purple);
       text-shadow: 0 0 15px rgba(248, 250, 252, 0.5);
       font-weight: 700;
       display: flex;
       align-items: center;
       gap: 12px;
     }
+    .light-mode .section h2 {
+        text-shadow: none;
+        color: var(--color-text-main);
+    }
+    .light-mode .section h2 .icon {
+        color: var(--color-accent-blue) !important;
+    }
 
     /* Summary Section */
     .summary-text {
-      color: #E5E7EB;
+      color: var(--color-text-main);
       font-size: 1.05rem;
       line-height: 1.8;
-      border-left: 4px solid #38BDF8;
+      border-left: 4px solid var(--color-accent-blue);
       padding-left: 20px;
       margin: 20px 0;
     }
@@ -243,7 +345,7 @@
     .job-entry {
       margin-bottom: 35px;
       padding-bottom: 30px;
-      border-bottom: 1px solid rgba(168, 85, 247, 0.25);
+      border-bottom: 1px solid var(--color-job-border);
     }
 
     .job-entry:last-child {
@@ -252,20 +354,23 @@
 
     .job-title {
       font-size: 1.4rem;
-      color: #FFFFFF;
+      color: var(--color-text-header);
       font-weight: 700;
       margin-bottom: 5px;
     }
+    .light-mode .job-title {
+        color: var(--color-text-main);
+    }
 
     .company-period {
-      color: #A855F7;
+      color: var(--color-accent-purple);
       font-weight: 600;
       font-size: 1.05rem;
       margin-bottom: 15px;
     }
 
     .job-description {
-      color: #E5E7EB;
+      color: var(--color-text-main);
       line-height: 1.8;
     }
 
@@ -280,14 +385,14 @@
       margin-bottom: 12px;
       padding-left: 25px;
       position: relative;
-      color: #CBD5F5;
+      color: var(--color-text-main);
     }
 
     .job-description li::before {
       content: '▶';
       position: absolute;
       left: 0;
-      color: #38BDF8;
+      color: var(--color-accent-blue);
       font-size: 0.8rem;
     }
 
@@ -306,18 +411,29 @@
       padding: 20px;
       transition: all 0.3s ease;
     }
+    .light-mode .skill-category {
+        background: rgba(147, 51, 234, 0.06);
+        border: 1px solid rgba(147, 51, 234, 0.18);
+    }
 
     .skill-category:hover {
       background: rgba(56, 189, 248, 0.14);
       border-color: rgba(56, 189, 248, 0.4);
       transform: translateY(-5px);
     }
+    .light-mode .skill-category:hover {
+        background: rgba(147, 51, 234, 0.14);
+        border-color: rgba(147, 51, 234, 0.4);
+    }
 
     .skill-category h3 {
-      color: #FFFFFF;
+      color: var(--color-text-header);
       font-weight: 700;
       margin-bottom: 15px;
       font-size: 1.1rem;
+    }
+    .light-mode .skill-category h3 {
+        color: var(--color-text-main);
     }
 
     .skill-list {
@@ -329,25 +445,35 @@
     .skill-tag {
       background: linear-gradient(135deg, rgba(168, 85, 247, 0.35) 0%, rgba(56, 189, 248, 0.25) 100%);
       border: 1px solid rgba(168, 85, 247, 0.5);
-      color: #E5E7EB;
+      color: var(--color-text-main);
       padding: 8px 15px;
       border-radius: 20px;
       font-size: 0.95rem;
       font-weight: 500;
       transition: all 0.3s ease;
     }
+    .light-mode .skill-tag {
+        background: linear-gradient(135deg, rgba(147, 51, 234, 0.15) 0%, rgba(14, 165, 233, 0.1) 100%);
+        border: 1px solid rgba(147, 51, 234, 0.3);
+        color: var(--color-text-main);
+    }
 
     .skill-tag:hover {
       background: linear-gradient(135deg, rgba(168, 85, 247, 0.55) 0%, rgba(56, 189, 248, 0.5) 100%);
-      color: #38BDF8;
+      color: var(--color-accent-blue);
       box-shadow: 0 0 15px rgba(56, 189, 248, 0.35);
+    }
+    .light-mode .skill-tag:hover {
+        background: linear-gradient(135deg, rgba(147, 51, 234, 0.3) 0%, rgba(14, 165, 233, 0.2) 100%);
+        color: var(--color-accent-purple);
+        box-shadow: 0 0 10px rgba(147, 51, 234, 0.1);
     }
 
     /* Education & Certifications */
     .edu-item {
       margin-bottom: 25px;
       padding-bottom: 20px;
-      border-bottom: 1px solid rgba(168, 85, 247, 0.15);
+      border-bottom: 1px solid var(--color-job-border);
     }
 
     .edu-item:last-child {
@@ -356,19 +482,22 @@
 
     .edu-degree {
       font-size: 1.2rem;
-      color: #FFFFFF;
+      color: var(--color-text-header);
       font-weight: 700;
       margin-bottom: 5px;
     }
+    .light-mode .edu-degree {
+        color: var(--color-text-main);
+    }
 
     .edu-details {
-      color: #A855F7;
+      color: var(--color-accent-purple);
       font-weight: 600;
       margin-bottom: 8px;
     }
 
     .edu-description {
-      color: #E5E7EB;
+      color: var(--color-text-main);
       font-size: 0.95rem;
     }
 
@@ -381,9 +510,9 @@
     }
 
     .project-card {
-      background: rgba(15, 23, 42, 0.9);
+      background: var(--color-project-card-bg);
       border-radius: 12px;
-      border: 1px solid rgba(56, 189, 248, 0.25);
+      border: 1px solid var(--color-project-border);
       overflow: hidden;
       display: flex;
       flex-direction: column;
@@ -392,9 +521,16 @@
       display: none; /* pagination controls visibility */
     }
 
+    .light-mode .project-card {
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+
     .project-card:hover {
       transform: translateY(-6px);
       box-shadow: 0 18px 40px rgba(56, 189, 248, 0.25);
+    }
+    .light-mode .project-card:hover {
+        box-shadow: 0 18px 40px rgba(147, 51, 234, 0.15);
     }
 
     .project-thumb {
@@ -403,7 +539,7 @@
       padding-top: 56.25%; /* 16:9 Aspect Ratio */
       position: relative;
       overflow: hidden;
-      background-color: #0F172A; /* Fallback to a card background color */
+      background-color: var(--color-background-main); /* Fallback to a card background color */
     }
     
     /* Style for the blurred background image */
@@ -418,6 +554,9 @@
       transform: scale(1.1); /* Scale up to hide blur edges */
       z-index: 1;
       transition: transform 0.3s ease;
+    }
+    .light-mode .project-thumb .blur-background-img {
+        filter: blur(10px) brightness(0.8); /* Less dark in light mode */
     }
 
     /* Ensure the link wrapper is above the background but below the contained image */
@@ -462,18 +601,21 @@
 
     .project-name {
       font-size: 1.1rem;
-      color: #FFFFFF;
+      color: var(--color-text-header);
       font-weight: 700;
+    }
+    .light-mode .project-name {
+        color: var(--color-text-main);
     }
 
     .project-domain {
-      color: #A855F7;
+      color: var(--color-accent-purple);
       font-size: 0.9rem;
       font-weight: 600;
     }
 
     .project-description {
-      color: #E5E7EB;
+      color: var(--color-text-main);
       font-size: 0.9rem;
     }
 
@@ -483,12 +625,12 @@
     }
 
     .project-link a {
-      color: #38BDF8;
+      color: var(--color-accent-blue);
       text-decoration: none;
     }
 
     .project-link a:hover {
-      color: #A855F7;
+      color: var(--color-accent-purple);
       text-decoration: underline;
     }
 
@@ -504,11 +646,14 @@
       padding: 6px 14px;
       border-radius: 999px;
       border: 1px solid rgba(56, 189, 248, 0.35);
-      background: rgba(15, 23, 42, 0.9);
+      background: var(--color-project-card-bg);
       font-size: 0.9rem;
-      color: #E5E7EB;
+      color: var(--color-text-main);
       min-width: 120px;
       text-align: center;
+    }
+    .light-mode .page-indicator {
+        border: 1px solid rgba(147, 51, 234, 0.35);
     }
 
     .page-btn {
@@ -519,7 +664,7 @@
       border-radius: 999px;
       border: none;
       cursor: pointer;
-      background: radial-gradient(circle at 20% 0, #38BDF8 0, #0EA5E9 35%, #0369A1 100%);
+      background: radial-gradient(circle at 20% 0, var(--color-accent-blue) 0, #0EA5E9 35%, #0369A1 100%);
       color: #0B1220;
       font-weight: 600;
       font-size: 0.95rem;
@@ -527,10 +672,18 @@
       transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
     }
 
+    .light-mode .page-btn {
+        background: radial-gradient(circle at 20% 0, var(--color-accent-purple) 0, #9333EA 35%, #7E22CE 100%);
+        box-shadow: 0 10px 30px rgba(147, 51, 234, 0.3);
+    }
+
     .page-btn:hover:not(:disabled) {
       transform: translateY(-2px);
       box-shadow: 0 16px 40px rgba(56, 189, 248, 0.55);
       filter: brightness(1.05);
+    }
+    .light-mode .page-btn:hover:not(:disabled) {
+        box-shadow: 0 16px 40px rgba(147, 51, 234, 0.45);
     }
 
     .page-btn:disabled {
@@ -553,6 +706,9 @@
       border-radius: 8px;
       align-items: flex-start;
     }
+    .light-mode .achievement {
+        background: rgba(147, 51, 234, 0.05);
+    }
 
     .achievement-icon {
       font-size: 1.8rem;
@@ -560,13 +716,16 @@
     }
 
     .achievement-text {
-      color: #E5E7EB;
+      color: var(--color-text-main);
     }
 
     .achievement-title {
-      color: #FFFFFF;
+      color: var(--color-text-header);
       font-weight: 700;
       margin-bottom: 5px;
+    }
+    .light-mode .achievement-title {
+        color: var(--color-text-main);
     }
 
     /* Simple lists */
@@ -576,7 +735,7 @@
     }
 
     .simple-list li {
-      color: #E5E7EB;
+      color: var(--color-text-main);
       margin-bottom: 10px;
       padding-left: 25px;
       position: relative;
@@ -585,7 +744,7 @@
     .simple-list li span.bullet {
       position: absolute;
       left: 0;
-      color: #38BDF8;
+      color: var(--color-accent-blue);
     }
 
     /* Animation */
@@ -593,13 +752,104 @@
       0%, 100% { text-shadow: 0 0 15px rgba(248, 250, 252, 0.4); }
       50% { text-shadow: 0 0 25px rgba(248, 250, 252, 0.9); }
     }
+    .light-mode @keyframes glow {
+      0%, 100% { text-shadow: 0 0 5px rgba(0, 0, 0, 0.1); }
+      50% { text-shadow: 0 0 10px rgba(0, 0, 0, 0.2); }
+    }
 
     .glow-text {
       animation: glow 2s ease-in-out infinite;
     }
+    
+    /* Starter Page / Splash Screen CSS */
+    .splash-screen {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #000000; /* Solid black background for video contrast */
+        z-index: 200;
+        /* Center content using Flexbox */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        transition: opacity 0.5s ease;
+    }
+    
+    .splash-video-container {
+        position: absolute; /* Changed to absolute to sit behind content */
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        z-index: 1; /* Lower z-index than content */
+    }
+    
+    .splash-video {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        min-width: 100%;
+        min-height: 100%;
+        width: auto;
+        height: auto;
+        transform: translate(-50%, -50%);
+        filter: brightness(0.6); /* Darken the video slightly */
+    }
+    
+    .splash-content {
+        position: relative;
+        z-index: 10; /* Higher z-index to sit on top of video */
+        text-align: center;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    .splash-button {
+        padding: 15px 30px;
+        /* No margin-top needed if we are strictly centering via flex parent */
+        border-radius: 50px;
+        border: 2px solid var(--color-accent-blue);
+        background: radial-gradient(circle at 20% 0, #38BDF8 0, #0EA5E9 35%, #0369A1 100%);
+        color: #0B1220;
+        font-weight: 700;
+        font-size: 1.1rem;
+        cursor: pointer;
+        box-shadow: 0 10px 30px rgba(56, 189, 248, 0.5);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    
+    .splash-button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 16px 40px rgba(56, 189, 248, 0.7);
+    }
+
   </style>
 </head>
 <body>
+    
+  <div class="splash-screen" id="splashScreen">
+    <div class="splash-video-container">
+      <video autoplay loop muted playsinline class="splash-video" id="introVideo">
+        <source src="https://github.com/rkashyap-creator/portfolio/blob/main/Game%20Imge/20415377-uhd_3840_2160_50fps.mp4?raw=true" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+    </div>
+
+    <audio id="introAudio" autoplay loop>
+        <source src="https://github.com/rkashyap-creator/portfolio/blob/main/Game%20Imge/2yxa%20ru%20GTA%20V%20%20%20Welcome%20to%20Los%20Santos%20Soundtrack%20%20%20Intro%20Theme%20song%20KzKvPrIPVbE%20561349%20-%20dato%20svanidze.mp3?raw=true" type="audio/mp3">
+    </audio>
+
+    <div class="splash-content">
+      <button class="splash-button" id="enterPortfolio">Click to see</button>
+    </div>
+  </div>
+
   <canvas id="gameCanvas"></canvas>
 
   <audio id="button-sound" src="https://raw.githubusercontent.com/rkashyap-creator/ritikkashyap-portfolio/main/Game%20Imge/click%20sound.wav" preload="auto"></audio>
@@ -617,19 +867,25 @@
     <button class="nav-btn" data-target="#projects-section">
       <span class="icon">🎮</span><span>Projects</span>
     </button>
+    <button class="nav-btn" data-target="#artstation-section">
+        <span class="icon">🎨</span><span>ArtStation</span>
+      </button>
     <button class="nav-btn" data-target="#skills-section">
       <span class="icon">🧠</span><span>Skills</span>
     </button>
     <button class="nav-btn" data-target="#software-section">
       <span class="icon">🛠️</span><span>Tools</span>
     </button>
+    <button class="nav-btn mode-toggle-btn" id="modeToggleDesktop">
+        <span class="icon">🌗</span><span>Mode</span>
+    </button>
     </nav>
 
-  <div class="content-wrapper">
+  <div class="content-wrapper" id="mainContent">
     <header id="top-section">
       <h1>RITIK KASHYAP</h1>
       <p class="tagline">QA Tester & 3D Artist | Game Quality Specialist</p>
-      <p style="color: #9CA3AF; margin: 15px 0; font-size: 1.1rem; font-style: italic;">
+      <p style="color: var(--color-text-muted); margin: 15px 0; font-size: 1.1rem; font-style: italic;">
         I solve problems and help people overcome obstacles.
       </p>
 
@@ -711,127 +967,6 @@ Skilled in JQL, Unity/Unreal tools, GitHub, plugin development, and scalable ana
             <li>Worked as part of Richa Mehta’s creative team, supporting fashion and lifestyle content production.</li>
             <li>Contributed to Season 2 of motion graphics show “Trending Live with Richa Mehta”, focusing on visually engaging motion graphics and VFX elements.</li>
           </ul>
-        </div>
-      </div>
-    </div>
-
-    <div class="section" id="skills-section">
-      <h2>🧠 TECHNICAL SKILLS</h2>
-      <div class="skills-grid">
-        <div class="skill-category">
-          <h3>🎯 QA & Testing</h3>
-          <div class="skill-list">
-            <span class="skill-tag">Test planning & strategy</span>
-            <span class="skill-tag">Functional & regression testing</span>
-            <span class="skill-tag">Exploratory & edge‑case testing</span>
-            <span class="skill-tag">Live‑ops & event validation</span>
-            <span class="skill-tag">Monetisation flow checks</span>
-            <span class="skill-tag">Bug triage & reporting</span>
-          </div>
-        </div>
-
-        <div class="skill-category">
-          <h3>🎮 Game QA Focus</h3>
-          <div class="skill-list">
-            <span class="skill-tag">Cross‑platform compatibility</span>
-            <span class="skill-tag">Console submission readiness</span>
-            <span class="skill-tag">Online systems & matchmaking</span>
-            <span class="skill-tag">Progression & economy balancing</span>
-            <span class="skill-tag">UX & gameplay feedback</span>
-            <span class="skill-tag">Telemetry‑driven analysis</span>
-          </div>
-        </div>
-
-        <div class="skill-category">
-          <h3>🎨 3D & Creative</h3>
-          <div class="skill-list">
-            <span class="skill-tag">3D modelling & topology review</span>
-            <span class="skill-tag">Texturing & material polish</span>
-            <span class="skill-tag">Lighting & rendering passes</span>
-            <span class="skill-tag">Asset integration workflows</span>
-            <span class="skill-tag">Cinematic & promo shots</span>
-            <span class="skill-tag">Art‑quality feedback</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="section" id="software-section">
-      <h2>💻 SOFTWARE PROFICIENCY</h2>
-      <div class="skills-grid">
-        <div class="skill-category">
-          <h3>Operating Systems</h3>
-          <div class="skill-list">
-            <span class="skill-tag">Windows</span>
-            <span class="skill-tag">MAC</span>
-            <span class="skill-tag">Kali Linux</span>
-          </div>
-        </div>
-
-        <div class="skill-category">
-          <h3>Test Management & QA</h3>
-          <div class="skill-list">
-            <span class="skill-tag">Zephyr</span>
-            <span class="skill-tag">TestRail</span>
-            <span class="skill-tag">Xray</span>
-            <span class="skill-tag">Qmetry</span>
-            <span class="skill-tag">Jaas</span>
-            <span class="skill-tag">JIRA</span>
-          </div>
-        </div>
-
-        <div class="skill-category">
-          <h3>Dev & Automation</h3>
-          <div class="skill-list">
-            <span class="skill-tag">Shoelacer</span>
-            <span class="skill-tag">Postman</span>
-            <span class="skill-tag">Jenkins</span>
-          </div>
-        </div>
-
-        <div class="skill-category">
-          <h3>Analytics & Monitoring</h3>
-          <div class="skill-list">
-            <span class="skill-tag">Grafana</span>
-            <span class="skill-tag">ATLAS</span>
-            <span class="skill-tag">Live Viewer</span>
-            <span class="skill-tag">Kibana</span>
-          </div>
-        </div>
-
-        <div class="skill-category">
-          <h3>Collaboration & Office</h3>
-          <div class="skill-list">
-            <span class="skill-tag">MS Office 365</span>
-            <span class="skill-tag">Confluence</span>
-            <span class="skill-tag">Miro</span>
-          </div>
-        </div>
-
-        <div class="skill-category">
-          <h3>Game & Dev Kits</h3>
-          <div class="skill-list">
-            <span class="skill-tag">PS‑SDK</span>
-            <span class="skill-tag">Xbox‑GDK</span>
-            <span class="skill-tag">Mobile (Android/iOS)</span>
-          </div>
-        </div>
-
-        <div class="skill-category">
-          <h3>3D & Creative Tools</h3>
-          <div class="skill-list">
-            <span class="skill-tag">Blender</span>
-            <span class="skill-tag">Autodesk Maya</span>
-          </div>
-        </div>
-
-        <div class="skill-category">
-          <h3>Source Control & Utilities</h3>
-          <div class="skill-list">
-            <span class="skill-tag">GitHub</span>
-            <span class="skill-tag">Unity</span>
-            <span class="skill-tag">3uTool</span>
-          </div>
         </div>
       </div>
     </div>
@@ -1044,6 +1179,138 @@ Skilled in JQL, Unity/Unreal tools, GitHub, plugin development, and scalable ana
         </button>
       </div>
     </div>
+    
+    <div class="section" id="artstation-section">
+        <h2>🎨 ARTSTATION PORTFOLIO</h2>
+        <p class="summary-text" style="border-left: 4px solid var(--color-accent-purple);">
+            View my work as a **3D Artist** on ArtStation, showcasing detailed models, textures, and asset creations using tools like **Blender** and **Autodesk Maya**. This complements my technical QA expertise with strong creative and visual production skills.
+        </p>
+        <div style="text-align: center; margin-top: 30px;">
+            <a href="https://www.artstation.com/ritikkashyap" target="_blank" rel="noopener noreferrer" class="page-btn" style="background: radial-gradient(circle at 20% 0, var(--color-accent-purple) 0, #A855F7 35%, #9333EA 100%); color: #F3F4F6;">
+                <span class="emoji">🖼️</span> Visit ArtStation
+            </a>
+        </div>
+    </div>
+    <div class="section" id="skills-section">
+      <h2>🧠 TECHNICAL SKILLS</h2>
+      <div class="skills-grid">
+        <div class="skill-category">
+          <h3>🎯 QA & Testing</h3>
+          <div class="skill-list">
+            <span class="skill-tag">Test planning & strategy</span>
+            <span class="skill-tag">Functional & regression testing</span>
+            <span class="skill-tag">Exploratory & edge‑case testing</span>
+            <span class="skill-tag">Live‑ops & event validation</span>
+            <span class="skill-tag">Monetisation flow checks</span>
+            <span class="skill-tag">Bug triage & reporting</span>
+          </div>
+        </div>
+
+        <div class="skill-category">
+          <h3>🎮 Game QA Focus</h3>
+          <div class="skill-list">
+            <span class="skill-tag">Cross‑platform compatibility</span>
+            <span class="skill-tag">Console submission readiness</span>
+            <span class="skill-tag">Online systems & matchmaking</span>
+            <span class="skill-tag">Progression & economy balancing</span>
+            <span class="skill-tag">UX & gameplay feedback</span>
+            <span class="skill-tag">Telemetry‑driven analysis</span>
+          </div>
+        </div>
+
+        <div class="skill-category">
+          <h3>🎨 3D & Creative</h3>
+          <div class="skill-list">
+            <span class="skill-tag">3D modelling & topology review</span>
+            <span class="skill-tag">Texturing & material polish</span>
+            <span class="skill-tag">Lighting & rendering passes</span>
+            <span class="skill-tag">Asset integration workflows</span>
+            <span class="skill-tag">Cinematic & promo shots</span>
+            <span class="skill-tag">Art‑quality feedback</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section" id="software-section">
+      <h2>💻 SOFTWARE PROFICIENCY</h2>
+      <div class="skills-grid">
+        <div class="skill-category">
+          <h3>Operating Systems</h3>
+          <div class="skill-list">
+            <span class="skill-tag">Windows</span>
+            <span class="skill-tag">MAC</span>
+            <span class="skill-tag">Kali Linux</span>
+          </div>
+        </div>
+
+        <div class="skill-category">
+          <h3>Test Management & QA</h3>
+          <div class="skill-list">
+            <span class="skill-tag">Zephyr</span>
+            <span class="skill-tag">TestRail</span>
+            <span class="skill-tag">Xray</span>
+            <span class="skill-tag">Qmetry</span>
+            <span class="skill-tag">Jaas</span>
+            <span class="skill-tag">JIRA</span>
+          </div>
+        </div>
+
+        <div class="skill-category">
+          <h3>Dev & Automation</h3>
+          <div class="skill-list">
+            <span class="skill-tag">Shoelacer</span>
+            <span class="skill-tag">Postman</span>
+            <span class="skill-tag">Jenkins</span>
+          </div>
+        </div>
+
+        <div class="skill-category">
+          <h3>Analytics & Monitoring</h3>
+          <div class="skill-list">
+            <span class="skill-tag">Grafana</span>
+            <span class="skill-tag">ATLAS</span>
+            <span class="skill-tag">Live Viewer</span>
+            <span class="skill-tag">Kibana</span>
+          </div>
+        </div>
+
+        <div class="skill-category">
+          <h3>Collaboration & Office</h3>
+          <div class="skill-list">
+            <span class="skill-tag">MS Office 365</span>
+            <span class="skill-tag">Confluence</span>
+            <span class="skill-tag">Miro</span>
+          </div>
+        </div>
+
+        <div class="skill-category">
+          <h3>Game & Dev Kits</h3>
+          <div class="skill-list">
+            <span class="skill-tag">PS‑SDK</span>
+            <span class="skill-tag">Xbox‑GDK</span>
+            <span class="skill-tag">Mobile (Android/iOS)</span>
+          </div>
+        </div>
+
+        <div class="skill-category">
+          <h3>3D & Creative Tools</h3>
+          <div class="skill-list">
+            <span class="skill-tag">Blender</span>
+            <span class="skill-tag">Autodesk Maya</span>
+          </div>
+        </div>
+
+        <div class="skill-category">
+          <h3>Source Control & Utilities</h3>
+          <div class="skill-list">
+            <span class="skill-tag">GitHub</span>
+            <span class="skill-tag">Unity</span>
+            <span class="skill-tag">3uTool</span>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <div class="section">
       <h2>🎓 EDUCATION & CERTIFICATIONS</h2>
@@ -1112,7 +1379,7 @@ Skilled in JQL, Unity/Unreal tools, GitHub, plugin development, and scalable ana
       </ul>
     </div>
 
-    <div id="contact-section" style="text-align: center; margin-top: 60px; padding: 30px; border-top: 1px solid rgba(56, 189, 248, 0.18); color: #9CA3AF; font-size: 0.95rem;">
+    <div id="contact-section" style="text-align: center; margin-top: 60px; padding: 30px; border-top: 1px solid rgba(56, 189, 248, 0.18); color: var(--color-text-muted); font-size: 0.95rem;">
       <p>This resume is built with modern web technologies and gaming-inspired design aesthetics. 💻📱⭐🌙</p>
       <p style="margin-top: 10px; color: #6B7280; font-size: 0.9rem;">Last Updated: December 2025</p>
     </div>
@@ -1131,15 +1398,63 @@ Skilled in JQL, Unity/Unreal tools, GitHub, plugin development, and scalable ana
       <span class="icon">🎮</span>
       <span>Projects</span>
     </button>
+    <button class="nav-btn" data-target="#artstation-section">
+        <span class="icon">🎨</span>
+        <span>Art</span>
+    </button>
     <button class="nav-btn" data-target="#software-section">
       <span class="icon">🛠️</span>
       <span>Tools</span>
+    </button>
+    <button class="nav-btn mode-toggle-btn" id="modeToggleMobile">
+        <span class="icon">🌗</span>
+        <span>Mode</span>
     </button>
   </nav>
 
   <script>
     const canvas = document.getElementById('gameCanvas');
     const ctx = canvas.getContext('2d');
+    const body = document.body;
+    const modeToggleDesktop = document.getElementById('modeToggleDesktop');
+    const modeToggleMobile = document.getElementById('modeToggleMobile');
+    const enterPortfolioButton = document.getElementById('enterPortfolio');
+    const splashScreen = document.getElementById('splashScreen');
+    const mainContent = document.getElementById('mainContent');
+    const introVideo = document.getElementById('introVideo');
+    const introAudio = document.getElementById('introAudio');
+
+    // --- Mode Toggle Functionality ---
+    let isDarkMode = true;
+
+    function setMode(isDark) {
+      if (isDark) {
+        body.classList.remove('light-mode');
+        isDarkMode = true;
+      } else {
+        body.classList.add('light-mode');
+        isDarkMode = false;
+      }
+      localStorage.setItem('darkMode', isDarkMode);
+    }
+
+    function toggleMode() {
+      setMode(!isDarkMode);
+    }
+    
+    // Check local storage for preferred mode on load
+    const storedMode = localStorage.getItem('darkMode');
+    if (storedMode === 'false') {
+        setMode(false);
+    } else {
+        setMode(true); // Default to dark mode
+    }
+
+    modeToggleDesktop.addEventListener('click', toggleMode);
+    modeToggleMobile.addEventListener('click', toggleMode);
+
+
+    // --- Animated Background ---
 
     function resizeCanvas() {
       canvas.width = window.innerWidth;
@@ -1199,13 +1514,19 @@ Skilled in JQL, Unity/Unreal tools, GitHub, plugin development, and scalable ana
     }
 
     function animate() {
+      // Background gradient respects light/dark mode variables
+      const bgColorStart = isDarkMode ? '#0B0E14' : '#F8FAFC';
+      const bgColorEnd = isDarkMode ? '#020617' : '#FFFFFF';
+
       const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
-      gradient.addColorStop(0, '#0B0E14');
-      gradient.addColorStop(1, '#020617');
+      gradient.addColorStop(0, bgColorStart);
+      gradient.addColorStop(1, bgColorEnd);
       ctx.fillStyle = gradient;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      ctx.strokeStyle = 'rgba(56, 189, 248, 0.04)';
+      // Grid lines visibility and color (subtle, less visible in light mode)
+      const gridColor = isDarkMode ? 'rgba(56, 189, 248, 0.04)' : 'rgba(147, 51, 234, 0.03)';
+      ctx.strokeStyle = gridColor;
       ctx.lineWidth = 1;
       const gridSize = 70;
       for (let x = 0; x < canvas.width; x += gridSize) {
@@ -1231,7 +1552,7 @@ Skilled in JQL, Unity/Unreal tools, GitHub, plugin development, and scalable ana
 
     animate();
 
-    // Pagination
+    // --- Pagination ---
     const projectCards = Array.from(document.querySelectorAll('.project-card'));
     const perPage = 3;
     let currentPage = 1;
@@ -1258,7 +1579,7 @@ Skilled in JQL, Unity/Unreal tools, GitHub, plugin development, and scalable ana
       nextBtn.disabled = currentPage === totalPages;
     }
 
-    // Audio Play
+    // --- Audio Play ---
     const buttonSound = document.getElementById('button-sound');
 
     function playButtonSound() {
@@ -1286,7 +1607,7 @@ Skilled in JQL, Unity/Unreal tools, GitHub, plugin development, and scalable ana
     // Rerender after changes to totalPages
     renderPage(1);
 
-    // Nav click events
+    // --- Nav click events ---
     const navButtons = document.querySelectorAll('.nav-btn');
     navButtons.forEach(btn => {
       btn.addEventListener('click', () => {
@@ -1298,12 +1619,35 @@ Skilled in JQL, Unity/Unreal tools, GitHub, plugin development, and scalable ana
         }
       });
     });
+    
+    // --- Splash Screen Logic ---
+    enterPortfolioButton.addEventListener('click', () => {
+        playButtonSound();
+        
+        // Stop the video and audio immediately
+        if(introVideo) introVideo.pause();
+        if(introAudio) introAudio.pause();
+
+        // Fade out splash screen
+        splashScreen.style.opacity = '0';
+        // Show main content wrapper
+        mainContent.classList.add('content-visible');
+        
+        // Hide and remove after fade out
+        setTimeout(() => {
+            splashScreen.style.display = 'none';
+        }, 500);
+    });
+
+    // Attempt to play audio on load
+    window.addEventListener('load', () => {
+         if(introAudio) introAudio.play().catch(e => console.log("Audio autoplay blocked by browser policy"));
+    });
+    
+    // Hide main content until splash screen is cleared
+    mainContent.classList.remove('content-visible');
+    
   </script>
 </body>
 
 </html>
-
-
-
-
-
