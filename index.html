@@ -833,6 +833,10 @@
 </head>
 <body>
     
+  <audio id="introAudio" autoplay loop>
+      <source src="https://github.com/rkashyap-creator/portfolio/blob/main/Game%20Imge/2yxa%20ru%20GTA%20V%20%20%20Welcome%20to%20Los%20Santos%20Soundtrack%20%20%20Intro%20Theme%20song%20KzKvPrIPVbE%20561349%20-%20dato%20svanidze.mp3?raw=true" type="audio/mp3">
+  </audio>
+
   <div class="splash-screen" id="splashScreen">
     <div class="splash-video-container">
       <video autoplay loop muted playsinline class="splash-video" id="introVideo">
@@ -840,10 +844,6 @@
         Your browser does not support the video tag.
       </video>
     </div>
-
-    <audio id="introAudio" autoplay loop>
-        <source src="https://github.com/rkashyap-creator/portfolio/blob/main/Game%20Imge/2yxa%20ru%20GTA%20V%20%20%20Welcome%20to%20Los%20Santos%20Soundtrack%20%20%20Intro%20Theme%20song%20KzKvPrIPVbE%20561349%20-%20dato%20svanidze.mp3?raw=true" type="audio/mp3">
-    </audio>
 
     <div class="splash-content">
       <button class="splash-button" id="enterPortfolio">Click to see</button>
@@ -905,6 +905,10 @@
         <div class="contact-item">
           <span>🎨</span>
           <a href="https://www.artstation.com/ritikkashyap" target="_blank">ArtStation Portfolio</a>
+        </div>
+        <div class="contact-item">
+          <span>📄</span>
+          <a href="https://github.com/rkashyap-creator/portfolio/blob/main/Game%20Imge/CV-%20Ritik%20kashyap.pdf" target="_blank">Download CV</a>
         </div>
       </div>
     </header>
@@ -1183,7 +1187,7 @@ Skilled in JQL, Unity/Unreal tools, GitHub, plugin development, and scalable ana
     <div class="section" id="artstation-section">
         <h2>🎨 ARTSTATION PORTFOLIO</h2>
         <p class="summary-text" style="border-left: 4px solid var(--color-accent-purple);">
-            View my work as a **3D Artist** on ArtStation, showcasing detailed models, textures, and asset creations using tools like **Blender** and **Autodesk Maya**. This complements my technical QA expertise with strong creative and visual production skills.
+            View my work as a 3D Artist on ArtStation, showcasing detailed models, textures, and asset creations using tools like Blender and Autodesk Maya. This complements my technical QA expertise with strong creative and visual production skills.
         </p>
         <div style="text-align: center; margin-top: 30px;">
             <a href="https://www.artstation.com/ritikkashyap" target="_blank" rel="noopener noreferrer" class="page-btn" style="background: radial-gradient(circle at 20% 0, var(--color-accent-purple) 0, #A855F7 35%, #9333EA 100%); color: #F3F4F6;">
@@ -1380,7 +1384,7 @@ Skilled in JQL, Unity/Unreal tools, GitHub, plugin development, and scalable ana
     </div>
 
     <div id="contact-section" style="text-align: center; margin-top: 60px; padding: 30px; border-top: 1px solid rgba(56, 189, 248, 0.18); color: var(--color-text-muted); font-size: 0.95rem;">
-      <p>This resume is built with modern web technologies and gaming-inspired design aesthetics. 💻📱⭐🌙</p>
+      <p>Ritik Kashyap Copyrights. 💻📱⭐🌙</p>
       <p style="margin-top: 10px; color: #6B7280; font-size: 0.9rem;">Last Updated: December 2025</p>
     </div>
   </div>
@@ -1624,9 +1628,11 @@ Skilled in JQL, Unity/Unreal tools, GitHub, plugin development, and scalable ana
     enterPortfolioButton.addEventListener('click', () => {
         playButtonSound();
         
-        // Stop the video and audio immediately
+        // Ensure audio plays when user interacts (if blocked by autoplay policy)
+        if(introAudio) introAudio.play().catch(e => console.log("Audio play error:", e));
+
+        // Stop the video immediately
         if(introVideo) introVideo.pause();
-        if(introAudio) introAudio.pause();
 
         // Fade out splash screen
         splashScreen.style.opacity = '0';
@@ -1649,5 +1655,4 @@ Skilled in JQL, Unity/Unreal tools, GitHub, plugin development, and scalable ana
     
   </script>
 </body>
-
 </html>
